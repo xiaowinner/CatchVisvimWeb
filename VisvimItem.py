@@ -16,6 +16,14 @@ page_reg = None
 DOWNLOAD_URL = 'https://shop.visvim.tv/jp/jp/top/'
 FIRST_URL = 'https://shop.visvim.tv/jp'
 
+visvim_headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Postman-Token': '418e8d14-f6e8-42da-a367-b23096206668',
+    'cookie': 'VISVIM_FRONT_PAGE_SESSION=0ra12aik83dmf29gsl8sjvniv1',
+    'cache-control': 'no-cache'
+}
+
 def parse_html(html):
 
     global current_page
@@ -63,13 +71,11 @@ def parse_html(html):
             'number': commodity_number
         }
         commodity_list.append(commodity)
-    print(commodity_list)
     return commodity_list
 
 
 def request_first_page(url):
-
-    html = GeneralCaptureMethod.get_page(url)
+    html = GeneralCaptureMethod.get_page(url, visvim_headers)
     results = parse_html(html)
     request_next_page(DOWNLOAD_URL)
 
@@ -80,9 +86,8 @@ def request_next_page(url):
             "REG": page_reg,
             "hdn006": current_page,
         }
-        html = GeneralCaptureMethod.post_page(url, parameters)
+        html = GeneralCaptureMethod.post_page(url, parameters, visvim_headers)
         results = parse_html(html)
-        print(current_page)
 
 
 def main():
